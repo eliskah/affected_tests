@@ -9,7 +9,9 @@ RSpec.configure do |config|
     AffectedTests.stop_trace
     target_spec = self.class.declaration_locations.last[0]
     unless target_spec.end_with?("_spec.rb")
-      target_spec = self.class.parents.first.declaration_locations.first[0]
+      if parent = self.class.parents.detect { |p| p.try(:declaration_locations) }
+        target_spec = parent.declaration_locations.first[0]
+      end
     end
     AffectedTests.checkpoint(target_spec)
   end
