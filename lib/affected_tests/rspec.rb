@@ -8,6 +8,9 @@ RSpec.configure do |config|
   config.append_after(:each) do
     AffectedTests.stop_trace
     target_spec = self.class.declaration_locations.last[0]
+    unless target_spec.end_with?("_spec.rb")
+      target_spec = self.class.parents.first.declaration_locations.first[0]
+    end
     AffectedTests.checkpoint(target_spec)
   end
 
